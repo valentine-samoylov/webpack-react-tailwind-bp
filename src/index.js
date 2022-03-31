@@ -1,7 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './index.scss'
+import { createRoot } from 'react-dom/client'
+import ContextProviders from '@context/ContextProviders'
+import './globals.scss'
 import App from './App'
 
-const mountNode = document.getElementById('root')
-ReactDOM.render(<App />, mountNode)
+const container = document.getElementById('app')
+const root = createRoot(container)
+
+root.render(
+  <ContextProviders>
+    <App />
+  </ContextProviders>
+)

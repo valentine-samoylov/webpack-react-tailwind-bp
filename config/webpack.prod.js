@@ -1,6 +1,6 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 const { merge } = require('webpack-merge')
 const paths = require('./paths')
@@ -36,6 +36,11 @@ module.exports = merge(common, {
   },
 
   plugins: [
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      reportFilename: '../reports/report.html',
+      openAnalyzer: false,
+    }),
     new MiniCssExtractPlugin({
       filename: 'styles/[name].[contenthash].css',
       chunkFilename: '[id].css',
@@ -46,6 +51,8 @@ module.exports = merge(common, {
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        test: /\.js(\?.*)?$/i,
+        parallel: true,
         terserOptions: {
           format: {
             comments: false,
@@ -53,7 +60,6 @@ module.exports = merge(common, {
         },
         extractComments: false,
       }),
-      new CssMinimizerPlugin(),
       new ImageMinimizerPlugin({
         minimizer: {
           implementation: ImageMinimizerPlugin.squooshMinify,
